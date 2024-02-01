@@ -51,29 +51,77 @@ class REST:
         self.id = accountId
         return response.json()
 
-    def get_cash(self) -> float:
+    def get_cash_balance(self,currency:str = None) -> dict:
         """Returns cash balance of the selected account
 
-        :return: cash balance
-        :rtype: float
+        :param currency: Currency to return
+        :type currency: str
+        :return: dict of cash balance
+        :rtype: dict
         """
         response = requests.get(
             f"{self.url}portfolio/{self.id}/ledger", verify=self.ssl
         )
+        
+        body = response.json()
+        
+        if currency:
+            return {currency: body[currency]["cashbalance"]}
+        
+        balance = {}
 
-        return response.json()["USD"]["cashbalance"]
+        for key, item in response.json().items():
+            if key != "BASE":
+                balance[key] = item["cashbalance"]
+            
+        return balance
 
-    def get_netvalue(self) -> float:
+    def get_stock_last_price(self, ticker:str, conid: str or int = "default", contract_filters: dict = {"isUS": True}) -> float:
+        """Get the last price of a stock
+        :param ticker: The ticker of the stock
+        :type ticker: str
+        :return: float for last stock price
+        :type return: float
+        """
+        import time
+        
+        fields = {
+            'last_price': '31'
+        }
+        response = None
+        price = None
+        while price is None:
+            try:
+                response = self.get_marketdata_snapshot(ticker, conid, contract_filters=contract_filters)
+                price = response[0][fields['last_price']]
+            except:
+                
+                print("Waiting for price")
+                time.sleep(0.5)
+            
+        return float(price)
+    
+    def get_netvalue(self,currency: str = None) -> dict:
         """Returns net value of the selected account
 
-        :return: Net value in USD
-        :rtype: float
+        :param currency: Currency to return
+        :type currency: str
+        :return: Net value of the selected account
+        :rtype: dict
         """
         response = requests.get(
             f"{self.url}portfolio/{self.id}/ledger", verify=self.ssl
         )
 
-        return response.json()["USD"]["netliquidationvalue"]
+        body = response.json()
+        if currency:
+            return {currency: body[currency]["netliquidationvalue"]}
+        
+        net_value = {}
+        for key, item in body.items():
+            if key != "BASE":
+                net_value[key] = item["netliquidationvalue"]
+        return net_value
 
     def get_conid(
         self,
@@ -96,9 +144,8 @@ class REST:
         response = requests.get(
             f"{self.url}trsrv/stocks", params=query, verify=self.ssl
         )
-
+        
         dic = response.json()
-
         if instrument_filters or contract_filters:
 
             def filter_instrument(instrument: dict) -> bool:
@@ -128,7 +175,6 @@ class REST:
                 return len(instrument["contracts"]) > 0
 
             dic[symbol] = list(filter(filter_instrument, dic[symbol]))
-
         return dic[symbol][0]["contracts"][0]["conid"]
 
     def get_portfolio(self) -> dict:
@@ -142,7 +188,7 @@ class REST:
         )
 
         dic = {item["contractDesc"]: item["position"] for item in response.json()}
-        dic["USD"] = self.get_cash()
+        dic["balance"] = self.get_cash_balance()
         return dic
 
     def reply_yes(self, id: str) -> dict:
@@ -159,7 +205,7 @@ class REST:
         response = requests.post(
             f"{self.url}iserver/reply/{id}", json=answer, verify=self.ssl
         )
-
+        print(response.json())
         return response.json()[0]
 
     def _reply_all_yes(self, response, reply_yes_to_all: bool) -> dict:
@@ -189,7 +235,6 @@ class REST:
             json={"orders": list_of_orders},
             verify=self.ssl,
         )
-
         assert response.status_code == 200, response.json()
 
         return self._reply_all_yes(response, reply_yes)
@@ -237,7 +282,7 @@ class REST:
         response = requests.delete(
             f"{self.url}iserver/account/{self.id}/order/{orderId}", verify=self.ssl
         )
-
+        
         return response.json()
 
     def modify_order(
@@ -345,6 +390,27 @@ class REST:
         )
 
         return response.json()[symbol]
+    
+    def get_marketdata_snapshot(self, symbol: str, conid: str or int = "default", contract_filters: dict = {"isUS": True}) -> dict:
+        """Returns market data snapshot for the given instrument. conid should be provided for futures and options.
+
+        :param symbol: Symbol of the stock instrument
+        :type symbol: str
+        :param conid: conid should be provided separately for futures or options. If not provided, it is assumed to be a stock.
+        :type conid: str or int, optional
+        :return: Response from the server
+        :rtype: dict
+        """
+        if conid == "default":
+            conid = self.get_conid(symbol,contract_filters=contract_filters)
+
+        
+        query = {"conids": conid, "fields": "31"}
+        response = requests.get(
+            f"{self.url}iserver/marketdata/snapshot", params=query, verify=self.ssl
+        )
+
+        return response.json()
 
 
 if __name__ == "__main__":
@@ -362,15 +428,4 @@ if __name__ == "__main__":
         }
     ]
 
-    # print(api.submit_order(orders))
-    # print(api.modify_order(1258176643, orders[0]))
-    # print(api.get_order(1258176642))
-    # print(api.get_portfolio())
-    # print(api.re_authenticate())
-    # print(api.get_auth_status())
-    # print(api.get_live_orders())
-    # print(api.get_bars("TSLA"))
-    # print(api.get_conid("AAPL"))
-    # print(api.get_conid("MUB", contract_filters={"isUS": True, "exchange": "ARCA"}))
-    # print(api.get_conid("MUB", instrument_filters={"name": "ISHARES NATIONAL MUNI BOND E", "assetClass": "STK"}))
-    # print(api.cancel_order(2027388848))
+
