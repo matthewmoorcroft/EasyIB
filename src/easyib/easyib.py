@@ -96,7 +96,7 @@ class REST:
                 price = response[0][fields['last_price']]
             except:
                 
-                print("Waiting for price")
+                print(f"Waiting for {ticker} price")
                 time.sleep(0.5)
             
         return float(price)
