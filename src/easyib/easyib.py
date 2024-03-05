@@ -99,7 +99,7 @@ class REST:
                 print(f"Waiting for {ticker} price")
                 time.sleep(0.5)
             
-        return float(price)
+        return float(price.replace("C",""))
     
     def get_netvalue(self,currency: str = None) -> dict:
         """Returns net value of the selected account
