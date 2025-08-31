@@ -1,9 +1,7 @@
-Reference
-==================
+Reference for ibcp.REST class.
+============================
 
-Reference for easyib.REST class.
-
-.. currentmodule:: easyib
+.. currentmodule:: ibcp
 .. autoclass:: REST
 
 Account info

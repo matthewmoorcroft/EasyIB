@@ -18,7 +18,7 @@ sys.path.insert(0, '../../src')
 
 # -- Project information -----------------------------------------------------
 
-project = 'EasyIB'
+project = 'IBCP'
 copyright = '2021, ashpipe'
 author = 'ashpipe'
 

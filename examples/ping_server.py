@@ -1,4 +1,4 @@
-import easyib
+import ibcp
 import time
 from datetime import datetime
 
@@ -8,7 +8,7 @@ from datetime import datetime
 if __name__ == "__main__":
 
     sleep_interval = 60 * 5
-    api = easyib.REST()
+    api = ibcp.REST()
 
     while True:
 
