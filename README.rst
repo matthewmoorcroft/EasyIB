@@ -1,5 +1,6 @@
+
 IBCP: Python Wrapper for Interactive Brokers API
-===============================================
+================================================
 
 .. image:: https://img.shields.io/pypi/v/ibcp
    :target: https://pypi.org/pypi/ibcp/
