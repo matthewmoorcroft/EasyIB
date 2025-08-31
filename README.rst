@@ -1,5 +1,5 @@
 IBCP: Python Wrapper for Interactive Brokers API
-==============================================
+===============================================
 
 .. image:: https://img.shields.io/pypi/v/ibcp
    :target: https://pypi.org/pypi/ibcp/
@@ -10,7 +10,7 @@ IBCP: Python Wrapper for Interactive Brokers API
 .. image:: https://readthedocs.org/projects/ibcp/badge/?version=latest
    :target: https://ibcp.readthedocs.io/en/latest/?badge=latest
 
-.. figure:: https://raw.githubusercontent.com/ashpipe/IBCP/main/docs/logo.png
+.. figure:: https://raw.githubusercontent.com/matthewmoorcroft/ibcp/main/docs/logo.png
    :alt: Logo for 'IBCP' according to Midjourney
    :align: center
 

@@ -19,8 +19,8 @@ sys.path.insert(0, '../../src')
 # -- Project information -----------------------------------------------------
 
 project = 'IBCP'
-copyright = '2021, ashpipe'
-author = 'ashpipe'
+copyright = '2021, matthewmoorcroft'
+author = 'matthewmoorcroft'
 
 # The full version, including alpha/beta/rc tags
 release = '0.0.3'
