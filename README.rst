@@ -12,10 +12,10 @@ IBCP: Python Wrapper for Interactive Brokers API
    :target: https://ibcp.readthedocs.io/en/latest/?badge=latest
 
 .. figure:: https://raw.githubusercontent.com/matthewmoorcroft/ibcp/main/docs/logo.png
-   :alt: Logo for 'IBCP' according to Midjourney
+   :alt: Logo for 'IBCP'
    :align: center
 
-   "Logo for 'IBCP'" according to Midjourney
+   "Logo for 'IBCP'"
 
 Overview
 --------
@@ -35,12 +35,12 @@ Features
 - Supports both SSL and non-SSL connections
 
 Requirements
------------
+--------
 
 IBCP assumes a gateway session is active and authenticated.
 
 Installation
------------
+--------
 
 IBCP was developed under the `Voyz/IBeam <https://github.com/voyz/ibeam>`__ docker image environment.
 
@@ -51,7 +51,7 @@ Once a gateway session is running, ``pip`` command can be used to install IBCP:
    pip install ibcp
 
 Usage
------
+--------
 
 .. code-block:: python
 
@@ -92,7 +92,7 @@ Usage
 For the complete reference, please visit https://ibcp.readthedocs.io/en/latest/reference.html.
 
 Configuration
-------------
+--------
 
 By default, IBCP assumes the gateway session is open at https://localhost:5000 without an SSL certificate. A custom URL and SSL certificate can be set by:
 
