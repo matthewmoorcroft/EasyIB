@@ -15,8 +15,6 @@ IBCP: Python Wrapper for Interactive Brokers API
    :alt: Logo for 'IBCP'
    :align: center
 
-   "Logo for 'IBCP'"
-
 Overview
 --------
 
