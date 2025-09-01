@@ -6,7 +6,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Upload Python Package
+name: Publish to PyPI
 
 on:
   release:
@@ -26,11 +26,26 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: Validate version matches tag
+        run: |
+          PROJECT_VERSION=$(grep '^version = "' pyproject.toml | sed 's/version = "//;s/"//')
+          TAG_VERSION=${GITHUB_REF#refs/tags/v}
+          echo "pyproject.toml version: $PROJECT_VERSION"
+          echo "Tag version: $TAG_VERSION"
+          if [ "$PROJECT_VERSION" != "$TAG_VERSION" ]; then
+            echo "Error: Version mismatch between pyproject.toml ($PROJECT_VERSION) and tag ($TAG_VERSION)"
+            exit 1
+          fi
+          echo "Version validation passed"
+
       - name: Build release distributions
         run: |
-          # NOTE: put your own distribution build steps here.
-          python -m pip install build
-          python -m build
+          uv build
 
       - name: Upload distributions
         uses: actions/upload-artifact@v4
